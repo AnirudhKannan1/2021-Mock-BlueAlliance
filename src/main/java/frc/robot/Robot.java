@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -57,7 +58,30 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    String gameData;
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if(gameData.length() > 0)
+    {
+      switch (gameData.charAt(0))
+      {
+        case 'R' :
+          //run red path
+          m_autonomousCommand = m_robotContainer.getAutonomousCommand("R");
+          break;
+        case 'B' :
+          m_autonomousCommand = m_robotContainer.getAutonomousCommand("B");
+          break;
+        case 'Y' :
+          m_autonomousCommand = m_robotContainer.getAutonomousCommand("Y");
+          break;
+        default :
+          //This is corrupt data
+          break;
+  }
+} else {
+  //Code for no data received yet
+}
+   
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

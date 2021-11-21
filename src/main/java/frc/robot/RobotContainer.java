@@ -7,8 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.RedPath;
+import frc.robot.commands.BluePath;
+import frc.robot.commands.YellowPath;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,6 +27,11 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  private final SequentialCommandGroup m_RedPath = new RedPath();
+  private final SequentialCommandGroup m_BluePath = new BluePath();
+  private final SequentialCommandGroup m_YellowPath = new YellowPath();
+
+  private final DriveTrain _driveTrain = new DriveTrain();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -41,8 +51,20 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+  public Command getAutonomousCommand(String gameData) 
+  {
+    if(gameData == "R")
+    {
+      return m_RedPath;
+    } else if (gameData == "B") {
+      return m_BluePath;
+    } else {
+      return m_YellowPath;
+    }
+  }
+
+  public DriveTrain getdriveTrain()
+  {
+      return _driveTrain;
   }
 }

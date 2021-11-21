@@ -20,6 +20,8 @@ public class DriveTrain extends SubsystemBase {
   private AHRS navx = new AHRS(SPI.Port.kMXP);
   private double circumference  = 47.12; // in centimeters
   private final int ticksInOneRevolution = 4096; 
+
+  private String gameData;
  
   private DifferentialDrive _diffDrive;
   
@@ -76,6 +78,11 @@ public class DriveTrain extends SubsystemBase {
 
  public void reset(){
    navx.reset();
+ }
+
+ public char getGameData()
+ {
+   return gameData.charAt(0); 
  }
  
  public void tankDrive(double leftSpeed, double rightSpeed) {
