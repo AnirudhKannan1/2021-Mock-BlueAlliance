@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.commands.TurnGyroPID;
-import frc.robot.commands.DriveForward; // Needs to be changed when merge
+import frc.robot.commands.AutoDrive2M; // Needs to be changed when merge
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -18,11 +18,10 @@ public class BluePath extends SequentialCommandGroup {
   DriveTrain dt = new DriveTrain();
 
   // Drive L
-  public BluePath() {
-    addCommands(
-      new DriveForward(dt, 1.0),
-      new TurnGyroPID(dt, 90.0),  // Check to make sure this turns right
-      new DriveForward(dt, 1.0) 
-    );
+  public BluePath() 
+  {
+    addCommands(new AutoDrive2M(dt, 100), new TurnGyroPID(dt, 90.0), new AutoDrive2M(dt, 100));
+    //addCommands(new TurnGyroPID(dt, 90.0));  // Check to make sure this turns right
+    //addCommands(new AutoDrive2M(dt, 100));
   }
 }

@@ -6,14 +6,22 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.RedPath;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoDrive2M;
 import frc.robot.commands.BluePath;
-import frc.robot.commands.YellowPath;
+import frc.robot.commands.DriveToALine;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TankDrive;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.commands.DriveToALine;
+import frc.robot.commands.TurnGyroPID;
+import frc.robot.commands.BluePath;
+import frc.robot.commands.YellowPath;
+import frc.robot.commands.RedPath;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,16 +34,37 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private static DriveTrain _driveTrain;
+  private final Joystick _leftJoystick;
+  private final Joystick _rightJoystick;
+ private final TankDrive _tankDrive;
+  private final ArcadeDrive _arcadeDrive;
+  private static DriveToALine _driveToLine;
+  private static AutoDrive2M test;
+  private final TurnGyroPID test2;
+  private final BluePath blue;
+  private final YellowPath yellow;
+  private final RedPath red;
 
-  private final SequentialCommandGroup m_RedPath = new RedPath();
-  private final SequentialCommandGroup m_BluePath = new BluePath();
-  private final SequentialCommandGroup m_YellowPath = new YellowPath();
-
-  private final DriveTrain _driveTrain = new DriveTrain();
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
+    _driveTrain = new DriveTrain();
+    _leftJoystick = new Joystick(Constants.USBOrder.Zero);
+    _rightJoystick = new Joystick(Constants.USBOrder.One);
+     _tankDrive = new TankDrive(_driveTrain, _leftJoystick, _rightJoystick);
+    _arcadeDrive = new ArcadeDrive(_driveTrain, _leftJoystick);
+    _driveTrain.setDefaultCommand(_tankDrive);
     configureButtonBindings();
+    _driveToLine = new DriveToALine();
+    test = new AutoDrive2M(_driveTrain, 200);
+    test2 = new TurnGyroPID(_driveTrain, -90.0);
+    blue = new BluePath();
+    yellow = new YellowPath();
+    red = new RedPath();
+    //test = new _driveTrain.tankDrive(.5,.5);
   }
 
   /**
@@ -44,27 +73,26 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
 
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand(String gameData) 
+  /*
+  public void initDefaultCommand()
   {
-    if(gameData == "R")
-    {
-      return m_RedPath;
-    } else if (gameData == "B") {
-      return m_BluePath;
-    } else {
-      return m_YellowPath;
-    }
+
+  }
+  */
+  public static DriveTrain getDriveTrain(){
+    return _driveTrain;
+  }
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return test;
   }
 
-  public DriveTrain getdriveTrain()
-  {
-      return _driveTrain;
-  }
 }
